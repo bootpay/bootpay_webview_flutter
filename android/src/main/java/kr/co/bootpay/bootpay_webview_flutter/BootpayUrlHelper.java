@@ -13,6 +13,7 @@ import java.util.Map;
 import io.flutter.plugin.common.MethodChannel;
 
 
+
 public class BootpayUrlHelper {
 
     public static boolean shouldOverrideUrlLoadingMethodChannel(WebView view, String url, Map<String, String> headers, boolean isMainFrame, MethodChannel methodChannel) {
@@ -128,6 +129,8 @@ public class BootpayUrlHelper {
     }
 
     public static boolean startApp(Intent intent, Context context) {
+        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         return true;
     }
