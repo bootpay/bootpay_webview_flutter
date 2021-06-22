@@ -150,45 +150,6 @@ public class FlutterView implements PlatformView, MethodCallHandler {
       flutterWebViewClient.onLoadingProgress(progress);
     }
 
-//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-//    @Override
-//    public void onPermissionRequest(final PermissionRequest request) {
-//      String[] requestedResources = request.getResources();
-//      ArrayList<String> permissions = new ArrayList<>();
-//      ArrayList<String> grantedPermissions = new ArrayList<String>();
-//      for (int i = 0; i < requestedResources.length; i++) {
-//        if (requestedResources[i].equals(PermissionRequest.RESOURCE_AUDIO_CAPTURE)) {
-//          permissions.add(Manifest.permission.RECORD_AUDIO);
-//        } else if (requestedResources[i].equals(PermissionRequest.RESOURCE_VIDEO_CAPTURE)) {
-//          permissions.add(Manifest.permission.CAMERA);
-//        }
-//        // TODO: RESOURCE_MIDI_SYSEX, RESOURCE_PROTECTED_MEDIA_ID.
-//      }
-//
-//      for (int i = 0; i < permissions.size(); i++) {
-//        if (ContextCompat.checkSelfPermission(mContext, permissions.get(i)) != PackageManager.PERMISSION_GRANTED) {
-//          continue;
-//        }
-//        if (permissions.get(i).equals(Manifest.permission.RECORD_AUDIO)) {
-//          grantedPermissions.add(PermissionRequest.RESOURCE_AUDIO_CAPTURE);
-//        } else if (permissions.get(i).equals(Manifest.permission.CAMERA)) {
-//          grantedPermissions.add(PermissionRequest.RESOURCE_VIDEO_CAPTURE);
-//        }
-//      }
-//
-//      if (grantedPermissions.isEmpty()) {
-//        request.deny();
-//      } else {
-//        String[] grantedPermissionsArray = new String[grantedPermissions.size()];
-//        grantedPermissionsArray = grantedPermissions.toArray(grantedPermissionsArray);
-//        request.grant(grantedPermissionsArray);
-//      }
-//    }
-//
-//    @Override
-//    public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-//      callback.invoke(origin, true, false);
-//    }
   }
 
   @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -208,7 +169,7 @@ public class FlutterView implements PlatformView, MethodCallHandler {
     Boolean usesHybridComposition = (Boolean) params.get("usesHybridComposition");
     webView =
         (usesHybridComposition)
-            ? new FlutterWebView(context)
+            ? new WebView(context)
             : new InputAwareWebView(context, containerView);
 
     displayListenerProxy.onPostWebViewInitialization(displayManager);
@@ -247,40 +208,6 @@ public class FlutterView implements PlatformView, MethodCallHandler {
       webView.loadUrl(url);
     }
   }
-
-//  void setWebSettings(Map<String, Object> params, MethodChannel methodChannel) {
-//    webView.getSettings().setDomStorageEnabled(true);
-//    webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-//
-//    // Multi windows is set with FlutterWebChromeClient by default to handle internal bug: b/159892679.
-//    webView.getSettings().setSupportMultipleWindows(true);
-//
-//    webView.setWebChromeClient(new FlutterWebChromeClient());
-//
-////    methodChannel = new MethodChannel(messenger, "kr.co.bootpay/webview_" + id);
-////    methodChannel.setMethodCallHandler(this);
-//
-//
-//    flutterWebViewClient = new FlutterWebViewClient(methodChannel);
-//    Map<String, Object> settings = (Map<String, Object>) params.get("settings");
-//    if (settings != null) applySettings(settings);
-//
-//    if (params.containsKey(JS_CHANNEL_NAMES_FIELD)) {
-//      List<String> names = (List<String>) params.get(JS_CHANNEL_NAMES_FIELD);
-//      if (names != null) registerJavaScriptChannelNames(names);
-//    }
-//
-//    Integer autoMediaPlaybackPolicy = (Integer) params.get("autoMediaPlaybackPolicy");
-//    if (autoMediaPlaybackPolicy != null) updateAutoMediaPlaybackPolicy(autoMediaPlaybackPolicy);
-//    if (params.containsKey("userAgent")) {
-//      String userAgent = (String) params.get("userAgent");
-//      updateUserAgent(userAgent);
-//    }
-//    if (params.containsKey("initialUrl")) {
-//      String url = (String) params.get("initialUrl");
-//      webView.loadUrl(url);
-//    }
-//  }
 
   @Override
   public View getView() {
