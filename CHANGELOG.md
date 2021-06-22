@@ -1,3 +1,3 @@
-## 0.0.1
+## 2.0.82
 
-* TODO: Describe initial release.
+* PG 결제가 가능한 웹뷰 배포 
