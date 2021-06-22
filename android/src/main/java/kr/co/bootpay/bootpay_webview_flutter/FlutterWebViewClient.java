@@ -14,6 +14,8 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.webkit.WebResourceErrorCompat;
 import androidx.webkit.WebViewClientCompat;
@@ -26,13 +28,13 @@ import java.util.Map;
 // shouldOverrideUrlLoading(WebView view, WebResourceRequest request)
 // invoked by the webview on older Android devices, without it pages that use iframes will
 // be broken when a navigationDelegate is set on Android version earlier than N.
-class FlutterWebViewClient {
+public class FlutterWebViewClient extends WebViewClient {
   private static final String TAG = "BootpayWebViewClient";
-  private final MethodChannel methodChannel;
+  private final @Nullable MethodChannel methodChannel;
   private boolean hasNavigationDelegate;
   boolean hasProgressTracking;
 
-  FlutterWebViewClient(MethodChannel methodChannel) {
+  public FlutterWebViewClient(MethodChannel methodChannel) {
     this.methodChannel = methodChannel;
   }
 
@@ -78,7 +80,7 @@ class FlutterWebViewClient {
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+  public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
     if (!hasNavigationDelegate) {
       return false;
     }
@@ -101,7 +103,7 @@ class FlutterWebViewClient {
     return BootpayUrlHelper.shouldOverrideUrlLoadingMethodChannel(view, request.getUrl().toString(), request.getRequestHeaders(), request.isForMainFrame(), methodChannel);
   }
 
-  boolean shouldOverrideUrlLoading(WebView view, String url) {
+  public boolean shouldOverrideUrlLoading(WebView view, String url) {
     if (!hasNavigationDelegate) {
       return false;
     }
@@ -118,13 +120,14 @@ class FlutterWebViewClient {
     return BootpayUrlHelper.shouldOverrideUrlLoadingMethodChannel(view, url, null, true, methodChannel);
   }
 
-  private void onPageStarted(WebView view, String url) {
+  public void onPageStarted(WebView view, String url) {
     Map<String, Object> args = new HashMap<>();
     args.put("url", url);
     methodChannel.invokeMethod("onPageStarted", args);
   }
 
-  private void onPageFinished(WebView view, String url) {
+  @Override
+  public void onPageFinished(WebView view, String url) {
     Map<String, Object> args = new HashMap<>();
     args.put("url", url);
     methodChannel.invokeMethod("onPageFinished", args);

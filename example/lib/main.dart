@@ -52,8 +52,8 @@ class _WebViewExampleState extends State<WebViewExample> {
       // to allow calling Scaffold.of(context) so we can show a snackbar.
       body: Builder(builder: (BuildContext context) {
         return WebView(
-          // initialUrl: 'https://www.google.com',
-          initialUrl: 'https://d-cdn.bootapi.com/test/payment/',
+          initialUrl: 'http://dev.cuma.co.kr/products/detail/19481?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTk4MzY2LCJ1dWlkIjoiZTIwNzI3OTQtYzIyYS00MTk0LWE5NDctYjM3ZGFkYzM0YTQ0IiwiZW1haWwiOiJydWRnaGtzQGYxcnN0bmF2aS5jb20iLCJuYW1lIjoi67CV6rK97ZmYIiwidXNlclR5cGUiOiJlbWFpbCIsImNyZWF0ZURhdGUiOiIyMDIwLTEyLTA4VDIwOjA5OjUxLjYwMloiLCJ1cGRhdGVEYXRlIjoiMjAyMS0wMy0xNlQwMzo1MDo1NC4wMDBaIiwic25zVG9rZW4iOm51bGwsImZjbVB1c2hUb2tlbiI6ImNmX2FiZ0VoVGhtS2RVOU1hMENzMWk6QVBBOTFiR2xaUnZWdko5bWJOV0Qxc0pNVHpTWWZTZUljTUxWY282T2lWeXNlXy1UeWZoSmhra25jMkJYX3k4UFNINDJoZjdwX1hFN0NFRGFtTmJBaTJlV0JWczd1VlQ3TG9HODFWQXFmdXUxLTRpZnY3VWotdkE4a2pUYTRxYkM2WDVYMWp0OXdzSWsiLCJ1c2VyU2V0dGluZ3MiOnsiY2xpZW50Q2VudGVyUmVwbHlBbGFybSI6ZmFsc2UsIm9yZGVyRGVsaXZlcnlBbGFybSI6ZmFsc2UsImFkdmVydGlzaW5nQWxhcm0iOmZhbHNlLCJhZHZlcnRpc2luZ0FsYXJtVXBkYXRlRGF0ZSI6IjIwMjEtMDMtMTFUMDQ6MTI6MTEuMDAwWiIsImFkdmVydGlzaW5nUHJvbW90aW9uIjpmYWxzZX0sImRldmljZUlkIjpudWxsLCJpYXQiOjE2MTU4NzY2NjQsImV4cCI6MTY0NzQzNDI2NH0.DrCIi_AwI60O3Mal6zxKhJJS9el5q1zAq2X2odMSwrE',
+          // initialUrl: 'https://d-cdn.bootapi.com/test/payment/',
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) {
             _controller.complete(webViewController);
