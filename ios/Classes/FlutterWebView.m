@@ -58,6 +58,7 @@
 @end
 
 @implementation FLTWebViewController {
+  WKWebView *_resumeWebView;
   FLTWKWebView* _webView;
   int64_t _viewId;
   FlutterMethodChannel* _channel;
@@ -118,14 +119,31 @@
     if ([initialUrl isKindOfClass:[NSString class]]) {
       [self loadUrl:initialUrl];
     }
+      
+
+    _resumeWebView = _webView;
+    NSNotificationCenter *notiCenter = [NSNotificationCenter defaultCenter];
+    [notiCenter addObserver:self selector:@selector(applicationDidBecomeActive:) name:@"Bootpay_applicationDidBecomeActive" object:nil];
+      
   }
   return self;
+}
+
+- (void) applicationDidBecomeActive:(NSNotification*) noti {
+//    NSLog(@"-------- applicationDidBecomeActive url: %@", _resumeWebView.URL.absoluteString);
+    if(_resumeWebView != nil) {
+        if([_resumeWebView.URL.absoluteString hasPrefix:@"https://nid.naver.com/nidlogin.login"]) {
+            [_resumeWebView evaluateJavaScript:@"document.getElementById('appschemeLogin_again_btn').click()" completionHandler:nil];
+        }
+    }
 }
 
 - (void)dealloc {
   if (_progressionDelegate != nil) {
     [_progressionDelegate stopObservingProgress:_webView];
   }
+  NSNotificationCenter *notiCenter = [NSNotificationCenter defaultCenter];
+  [notiCenter removeObserver: self];
 }
 
 - (UIView*)view {
@@ -482,8 +500,49 @@
     if (!navigationAction.targetFrame.isMainFrame) {
         [popupView loadRequest:navigationAction.request];
     }
+    _resumeWebView = popupView;
   
     return popupView;
+}
+
+- (void)webViewDidClose:(WKWebView *)webView {
+    [webView removeFromSuperview];
+}
+
+- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"확인" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        completionHandler();
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"취소" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        completionHandler();
+    }]];
+    
+    [[self topMostController] presentViewController:alert animated:true completion:nil];
+}
+
+- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler {
+
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"확인" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        completionHandler(true);
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"취소" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        completionHandler(false);
+    }]];
+    
+    [[self topMostController] presentViewController:alert animated:true completion:nil];
+}
+
+- (UIViewController*) topMostController
+{
+    UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+
+    return topController;
 }
 
 @end
