@@ -497,9 +497,9 @@
     popupView.UIDelegate = self;
     [webView addSubview:popupView];
       
-    if (!navigationAction.targetFrame.isMainFrame) {
-        [popupView loadRequest:navigationAction.request];
-    }
+//    if (!navigationAction.targetFrame.isMainFrame) {
+//        [popupView loadRequest:navigationAction.request];
+//    }
     _resumeWebView = popupView;
   
     return popupView;
