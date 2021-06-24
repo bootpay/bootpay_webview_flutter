@@ -41,10 +41,7 @@
           [self startAppToApp:navigationAction.request.URL];
           decisionHandler(WKNavigationActionPolicyCancel);
       } else if(![navigationAction.request.URL.absoluteString hasPrefix:@"http"]) {
-          [self startAppToApp:navigationAction.request.URL];
-//          decisionHandler(WKNavigationActionPolicyAllow);
-//      } else {
-//          decisionHandler(WKNavigationActionPolicyAllow);
+          [self startAppToApp:navigationAction.request.URL]; 
       }
       
       if ([result isKindOfClass:[FlutterError class]]) {
