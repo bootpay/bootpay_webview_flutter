@@ -137,23 +137,37 @@ public class BootpayUrlHelper {
 
     public static boolean startGooglePlay(Intent intent, Context context) {
         final String appPackageName = intent.getPackage();
+
         if(appPackageName == null) {
             Uri dataUri = intent.getData();
 
             try {
-                context.startActivity(new Intent(Intent.ACTION_VIEW, intent.getData()));
+                Intent addIntent = new Intent(Intent.ACTION_VIEW, intent.getData());
+                addIntent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
+                addIntent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(addIntent);
             } catch (Exception e) {
                 String packageName = "com.nhn.android.search"; //appPackageName이 비어있으면 네이버로 보내기(네이버 로그인)
                 if(dataUri != null && dataUri.toString().startsWith("wooripay://")) packageName = "com.wooricard.wpay"; //우리카드 예외처리
 
-                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
+                Intent addIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+                addIntent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
+                addIntent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(addIntent);
+//                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
             }
             return true;
         }
         try {
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            Intent addIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
+            addIntent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
+            addIntent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(addIntent);
         } catch (android.content.ActivityNotFoundException anfe) {
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+            Intent addIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName));
+            addIntent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
+            addIntent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(addIntent);
         }
         return true;
     }

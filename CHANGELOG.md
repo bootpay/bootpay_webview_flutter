@@ -1,3 +1,6 @@
+## 2.0.86
+* 안드로이드 startGooglePlay에 intent 호출시 new task flag 추가
+
 ## 2.0.85
 * 안드로이드 startApp에 intent 호출시 new task flag 추가 
 
