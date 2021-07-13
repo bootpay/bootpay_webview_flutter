@@ -1,3 +1,6 @@
+## 2.0.89
+* flutter webview와 ios 충돌 피하기  
+
 ## 2.0.88
 * ios 빌드 버그 수정  
 
