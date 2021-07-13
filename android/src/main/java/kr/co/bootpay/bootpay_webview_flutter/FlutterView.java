@@ -125,7 +125,9 @@ public class FlutterView implements PlatformView, MethodCallHandler {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         newWebView.getSettings().setSafeBrowsingEnabled(view.getSettings().getSafeBrowsingEnabled());
       }
-      newWebView.getSettings().setForceDark(view.getSettings().getForceDark());
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        newWebView.getSettings().setForceDark(view.getSettings().getForceDark());
+      }
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         newWebView.getSettings().setDisabledActionModeMenuItems(view.getSettings().getDisabledActionModeMenuItems());
       }

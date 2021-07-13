@@ -1,4 +1,3 @@
-/*
 #import "BootpayWebviewFlutterPlugin.h"
 #if __has_include(<bootpay_webview_flutter/bootpay_webview_flutter-Swift.h>)
 #import <bootpay_webview_flutter/bootpay_webview_flutter-Swift.h>
@@ -14,4 +13,3 @@
   [SwiftBootpayWebviewFlutterPlugin registerWithRegistrar:registrar];
 }
 @end
-*/
