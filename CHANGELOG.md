@@ -1,3 +1,6 @@
+## 2.0.891
+* android webview에 focusable true 추가   
+
 ## 2.0.89
 * flutter webview와 ios 충돌 피하기  
 

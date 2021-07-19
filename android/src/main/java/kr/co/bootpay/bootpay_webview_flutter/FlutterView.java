@@ -84,6 +84,8 @@ public class FlutterView implements PlatformView, MethodCallHandler {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
         newWebView.getSettings().setMediaPlaybackRequiresUserGesture( view.getSettings().getMediaPlaybackRequiresUserGesture() );
       }
+      newWebView.setFocusable(true);
+      newWebView.setFocusableInTouchMode(true);
 
       newWebView.getSettings().setBuiltInZoomControls(view.getSettings().getBuiltInZoomControls());
       newWebView.getSettings().setDisplayZoomControls(view.getSettings().getDisplayZoomControls());
@@ -94,6 +96,7 @@ public class FlutterView implements PlatformView, MethodCallHandler {
       newWebView.getSettings().setSaveFormData(view.getSettings().getSaveFormData());
       newWebView.getSettings().setSavePassword(view.getSettings().getSavePassword());
       newWebView.getSettings().setTextZoom(view.getSettings().getTextZoom());
+
 
       newWebView.getSettings().setUseWideViewPort(view.getSettings().getUseWideViewPort());
       newWebView.getSettings().setSupportMultipleWindows(true);
@@ -177,6 +180,9 @@ public class FlutterView implements PlatformView, MethodCallHandler {
     displayListenerProxy.onPostWebViewInitialization(displayManager);
 
     platformThreadHandler = new Handler(context.getMainLooper());
+
+    webView.setFocusable(true);
+    webView.setFocusableInTouchMode(true);
     // Allow local storage.
     webView.getSettings().setDomStorageEnabled(true);
     webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
