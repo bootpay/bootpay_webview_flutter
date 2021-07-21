@@ -67,7 +67,7 @@ final class ThreadedInputConnectionProxyAdapterView extends View {
   public InputConnection onCreateInputConnection(final EditorInfo outAttrs) {
     triggerDelayed = false;
     InputConnection inputConnection =
-        (isLocked) ? cachedConnection : targetView.onCreateInputConnection(outAttrs);
+            (isLocked) ? cachedConnection : targetView.onCreateInputConnection(outAttrs);
     triggerDelayed = true;
     cachedConnection = inputConnection;
     return inputConnection;

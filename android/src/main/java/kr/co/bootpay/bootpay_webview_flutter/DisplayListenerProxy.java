@@ -80,32 +80,32 @@ class DisplayListenerProxy {
       // We never explicitly unregister this listener as the webview's listener is never
       // unregistered (it's released when the process is terminated).
       displayManager.registerDisplayListener(
-          new DisplayListener() {
-            @Override
-            public void onDisplayAdded(int displayId) {
-              for (DisplayListener webViewListener : webViewListeners) {
-                webViewListener.onDisplayAdded(displayId);
-              }
-            }
+              new DisplayListener() {
+                @Override
+                public void onDisplayAdded(int displayId) {
+                  for (DisplayListener webViewListener : webViewListeners) {
+                    webViewListener.onDisplayAdded(displayId);
+                  }
+                }
 
-            @Override
-            public void onDisplayRemoved(int displayId) {
-              for (DisplayListener webViewListener : webViewListeners) {
-                webViewListener.onDisplayRemoved(displayId);
-              }
-            }
+                @Override
+                public void onDisplayRemoved(int displayId) {
+                  for (DisplayListener webViewListener : webViewListeners) {
+                    webViewListener.onDisplayRemoved(displayId);
+                  }
+                }
 
-            @Override
-            public void onDisplayChanged(int displayId) {
-              if (displayManager.getDisplay(displayId) == null) {
-                return;
-              }
-              for (DisplayListener webViewListener : webViewListeners) {
-                webViewListener.onDisplayChanged(displayId);
-              }
-            }
-          },
-          null);
+                @Override
+                public void onDisplayChanged(int displayId) {
+                  if (displayManager.getDisplay(displayId) == null) {
+                    return;
+                  }
+                  for (DisplayListener webViewListener : webViewListeners) {
+                    webViewListener.onDisplayChanged(displayId);
+                  }
+                }
+              },
+              null);
     }
   }
 
@@ -122,20 +122,20 @@ class DisplayListenerProxy {
       displayManagerGlobalField.setAccessible(true);
       Object displayManagerGlobal = displayManagerGlobalField.get(displayManager);
       Field displayListenersField =
-          displayManagerGlobal.getClass().getDeclaredField("mDisplayListeners");
+              displayManagerGlobal.getClass().getDeclaredField("mDisplayListeners");
       displayListenersField.setAccessible(true);
       ArrayList<Object> delegates =
-          (ArrayList<Object>) displayListenersField.get(displayManagerGlobal);
+              (ArrayList<Object>) displayListenersField.get(displayManagerGlobal);
 
       Field listenerField = null;
-      ArrayList<DisplayListener> listeners = new ArrayList<>();
+      ArrayList<DisplayManager.DisplayListener> listeners = new ArrayList<>();
       for (Object delegate : delegates) {
         if (listenerField == null) {
           listenerField = delegate.getClass().getField("mListener");
           listenerField.setAccessible(true);
         }
-        DisplayListener listener =
-            (DisplayListener) listenerField.get(delegate);
+        DisplayManager.DisplayListener listener =
+                (DisplayManager.DisplayListener) listenerField.get(delegate);
         listeners.add(listener);
       }
       return listeners;

@@ -1,3 +1,13 @@
+## 2.0.91  
+* popup시에 누락되었던 flutter로 webview navigation delegate 값 전달   
+
+## 2.0.893
+* android webview에 focus, focusable 모두 제거 
+* popup시에 누락되었던 flutter로 webview navigation delegate 값 전달   
+
+## 2.0.892
+* android webview에 focus event 추가    
+
 ## 2.0.891
 * android webview에 focusable true 추가   
 

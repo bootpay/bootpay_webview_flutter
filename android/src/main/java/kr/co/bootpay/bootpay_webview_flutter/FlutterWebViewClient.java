@@ -38,7 +38,7 @@ public class FlutterWebViewClient extends WebViewClient {
     this.methodChannel = methodChannel;
   }
 
-  private static String errorCodeToString(int errorCode) {
+  static String errorCodeToString(int errorCode) {
     switch (errorCode) {
       case WebViewClient.ERROR_AUTHENTICATION:
         return "authentication";

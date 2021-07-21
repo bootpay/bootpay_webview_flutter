@@ -34,8 +34,8 @@ final class InputAwareWebView extends WebView {
   InputAwareWebView(Context context, View containerView) {
     super(context);
     this.containerView = containerView;
-    setFocusable(true);
-    setFocusableInTouchMode(true);
+//    setFocusable(true);
+//    setFocusableInTouchMode(true);
   }
 
   void setContainerView(View containerView) {

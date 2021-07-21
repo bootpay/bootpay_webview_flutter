@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.GeolocationPermissions;
@@ -37,6 +38,7 @@ import io.flutter.plugin.platform.PlatformView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,13 +69,38 @@ public class FlutterView implements PlatformView, MethodCallHandler {
             public boolean shouldOverrideUrlLoading(
                 @NonNull WebView view, @NonNull WebResourceRequest request) {
               mainView = view;
-              return BootpayUrlHelper.shouldOverrideUrlLoading(view, request.getUrl().toString());
+//              return BootpayUrlHelper.shouldOverrideUrlLoading(view, request.getUrl().toString());
+              return BootpayUrlHelper.shouldOverrideUrlLoadingMethodChannel(view, request.getUrl().toString(), request.getRequestHeaders(), request.isForMainFrame(), methodChannel);
             }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
               mainView = view;
-              return BootpayUrlHelper.shouldOverrideUrlLoading(view, url);
+//              return BootpayUrlHelper.shouldOverrideUrlLoading(view, url);
+              return BootpayUrlHelper.shouldOverrideUrlLoadingMethodChannel(view, url, null, true, methodChannel);
+            }
+
+            public void onPageStarted(WebView view, String url) {
+              Map<String, Object> args = new HashMap<>();
+              args.put("url", url);
+              methodChannel.invokeMethod("onPageStarted", args);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+              Map<String, Object> args = new HashMap<>();
+              args.put("url", url);
+              methodChannel.invokeMethod("onPageFinished", args);
+            }
+
+            private void onWebResourceError(
+                    final int errorCode, final String description, final String failingUrl) {
+              final Map<String, Object> args = new HashMap<>();
+              args.put("errorCode", errorCode);
+              args.put("description", description);
+              args.put("errorType", FlutterWebViewClient.errorCodeToString(errorCode));
+              args.put("failingUrl", failingUrl);
+              methodChannel.invokeMethod("onWebResourceError", args);
             }
           };
 
@@ -84,8 +111,8 @@ public class FlutterView implements PlatformView, MethodCallHandler {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
         newWebView.getSettings().setMediaPlaybackRequiresUserGesture( view.getSettings().getMediaPlaybackRequiresUserGesture() );
       }
-      newWebView.setFocusable(true);
-      newWebView.setFocusableInTouchMode(true);
+//      newWebView.setFocusable(true);
+//      newWebView.setFocusableInTouchMode(true);
 
       newWebView.getSettings().setBuiltInZoomControls(view.getSettings().getBuiltInZoomControls());
       newWebView.getSettings().setDisplayZoomControls(view.getSettings().getDisplayZoomControls());
@@ -134,6 +161,22 @@ public class FlutterView implements PlatformView, MethodCallHandler {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         newWebView.getSettings().setDisabledActionModeMenuItems(view.getSettings().getDisabledActionModeMenuItems());
       }
+      newWebView.requestFocus(View.FOCUS_DOWN);
+      newWebView.setOnTouchListener(new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+          switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_UP:
+              if (!v.hasFocus()) {
+                v.requestFocus();
+              }
+              break;
+          }
+          return false;
+        }
+      });
+
 
       newWebView.setWebChromeClient(new FlutterWebChromeClient());
       view.addView(newWebView,
@@ -181,8 +224,8 @@ public class FlutterView implements PlatformView, MethodCallHandler {
 
     platformThreadHandler = new Handler(context.getMainLooper());
 
-    webView.setFocusable(true);
-    webView.setFocusableInTouchMode(true);
+//    webView.setFocusable(true);
+//    webView.setFocusableInTouchMode(true);
     // Allow local storage.
     webView.getSettings().setDomStorageEnabled(true);
     webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
@@ -215,6 +258,21 @@ public class FlutterView implements PlatformView, MethodCallHandler {
       String url = (String) params.get("initialUrl");
       webView.loadUrl(url);
     }
+    webView.requestFocus(View.FOCUS_DOWN);
+    webView.setOnTouchListener(new View.OnTouchListener() {
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+          case MotionEvent.ACTION_DOWN:
+          case MotionEvent.ACTION_UP:
+            if (!v.hasFocus()) {
+              v.requestFocus();
+            }
+            break;
+        }
+        return false;
+      }
+    });
   }
 
   @Override
