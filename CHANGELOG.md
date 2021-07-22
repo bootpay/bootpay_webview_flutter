@@ -1,3 +1,6 @@
+## 2.1.0  
+* 버전 재배포    
+
 ## 2.0.91  
 * popup시에 누락되었던 flutter로 webview navigation delegate 값 전달   
 
