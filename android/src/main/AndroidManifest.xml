@@ -79,6 +79,5 @@
         <package android:name="kr.co.kfcc.mobilebank" /> <!-- MG상상뱅크 -->
         <package android:name="com.nh.cashcardapp" /> <!-- MG상상뱅크 -->
         <package android:name="com.kbstar.liivbank" /> <!-- 국민 리브 -->
-        <package android:name="com.nh.cashcardapp" /> <!-- NH앱캐시 -->
     </queries>
 </manifest>
