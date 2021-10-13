@@ -229,7 +229,7 @@ extension FLTWebViewController {
                 result(FlutterError(
                         code: "evaluateJavaScript_failed",
                         message: "Failed evaluating JavaScript",
-                        details: "avaScript string was: '\(jsString)'\n\(String(describing: evResult))"))
+                        details: "JavaScript string was: '\(jsString)'\n\(String(describing: evResult))"))
             } else {
                 result(evResult)
             }

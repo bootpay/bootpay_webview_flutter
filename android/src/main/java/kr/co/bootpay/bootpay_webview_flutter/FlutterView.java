@@ -177,7 +177,6 @@ public class FlutterView implements PlatformView, MethodCallHandler {
         }
       });
 
-
       newWebView.setWebChromeClient(new FlutterWebChromeClient());
       view.addView(newWebView,
               new FrameLayout.LayoutParams(
