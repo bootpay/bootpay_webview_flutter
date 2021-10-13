@@ -116,3 +116,17 @@ class _WebViewExampleState extends State<WebViewExample> {
   }
 }
 ```
+
+## Documentation
+
+[부트페이 개발매뉴얼](https://bootpay.gitbook.io/docs/)을 참조해주세요
+
+## 기술문의
+
+[채팅](https://bootpay.channel.io/)으로 문의
+
+## License
+
+[MIT License](https://opensource.org/licenses/MIT).
+
+
