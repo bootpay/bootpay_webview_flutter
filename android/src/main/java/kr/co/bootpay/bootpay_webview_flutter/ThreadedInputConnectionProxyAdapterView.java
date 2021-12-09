@@ -6,6 +6,7 @@ package kr.co.bootpay.bootpay_webview_flutter;
 
 import android.os.Handler;
 import android.os.IBinder;
+import android.text.InputType;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -68,6 +69,12 @@ final class ThreadedInputConnectionProxyAdapterView extends View {
     triggerDelayed = false;
     InputConnection inputConnection =
             (isLocked) ? cachedConnection : targetView.onCreateInputConnection(outAttrs);
+
+    if ((outAttrs.inputType & InputType.TYPE_CLASS_NUMBER) == InputType.TYPE_CLASS_NUMBER)
+    {
+      outAttrs.inputType |= InputType.TYPE_NUMBER_FLAG_DECIMAL;
+    }
+
     triggerDelayed = true;
     cachedConnection = inputConnection;
     return inputConnection;

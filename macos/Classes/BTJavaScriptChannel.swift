@@ -8,7 +8,7 @@
 import FlutterMacOS
 import WebKit
 
-class FLTJavaScriptChannel: NSObject, WKScriptMessageHandler {
+class BTJavaScriptChannel: NSObject, WKScriptMessageHandler {
    
     var _methodChannel: FlutterMethodChannel!
     var _javaScriptChannelName: String!

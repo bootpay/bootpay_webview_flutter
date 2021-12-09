@@ -3,18 +3,16 @@
 // found in the LICENSE file.
 
 #import <Flutter/Flutter.h>
+#import <Foundation/Foundation.h>
 #import <WebKit/WebKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FLTWKNavigationDelegate : NSObject <WKNavigationDelegate>
+@interface BTWKProgressionDelegate : NSObject
 
-- (instancetype)initWithChannel:(FlutterMethodChannel*)channel;
+- (instancetype)initWithWebView:(WKWebView *)webView channel:(FlutterMethodChannel *)channel;
 
-/**
- * Whether to delegate navigation decisions over the method channel.
- */
-@property(nonatomic, assign) BOOL hasDartNavigationDelegate;
+- (void)stopObservingProgress:(WKWebView *)webView;
 
 @end
 

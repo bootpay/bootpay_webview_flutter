@@ -1,3 +1,6 @@
+## 2.1.41
+* ios prefix 수정 = FLT** -> BT**
+
 ## 2.1.4
 * android manifest 외부앱 패키지명 update  
 

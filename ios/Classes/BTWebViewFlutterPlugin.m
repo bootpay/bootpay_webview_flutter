@@ -3,16 +3,16 @@
 // found in the LICENSE file.
 
 #import "BTWebViewFlutterPlugin.h"
-#import "FLTCookieManager.h"
+#import "BTCookieManager.h"
 #import "FlutterWebView.h"
 
 @implementation BTWebViewFlutterPlugin
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  FLTWebViewFactory* webviewFactory =
-      [[FLTWebViewFactory alloc] initWithMessenger:registrar.messenger];
+  BTWebViewFactory* webviewFactory =
+      [[BTWebViewFactory alloc] initWithMessenger:registrar.messenger];
   [registrar registerViewFactory:webviewFactory withId:@"kr.co.bootpay/webview"];
-  [FLTCookieManager registerWithRegistrar:registrar];
+  [BTCookieManager registerWithRegistrar:registrar];
 }
 
 @end

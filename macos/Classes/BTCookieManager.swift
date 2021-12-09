@@ -1,5 +1,5 @@
 //
-//  sFLTCookieManager.swift
+//  BTCookieManager.swift
 //  bootpay_webview_flutter
 //
 //  Created by Taesup Yoon on 2021/07/05.
@@ -8,10 +8,10 @@
 import FlutterMacOS
 import WebKit
 
-public class FLTCookieManager: NSObject, FlutterPlugin {
+public class BTCookieManager: NSObject, FlutterPlugin {
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let instance = FLTCookieManager()
+        let instance = BTCookieManager()
         let channel = FlutterMethodChannel(name: "kr.co.bootpay/cookie_manager", binaryMessenger: registrar.messenger)
         registrar.addMethodCallDelegate(instance, channel: channel)
     }

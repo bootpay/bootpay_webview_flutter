@@ -1,5 +1,5 @@
 //
-//  sFLTWKProgressionDelegate.swift
+//  BTWKProgressionDelegate.swift
 //  bootpay_webview_flutter
 //
 //  Created by Taesup Yoon on 2021/07/05.
@@ -8,7 +8,7 @@
 import FlutterMacOS
 import WebKit
 
-public class FLTWKProgressionDelegate: NSObject {
+public class BTWKProgressionDelegate: NSObject {
     let FLTWKEstimatedProgressKeyPath = "estimatedProgress"
     var _methodChannel: FlutterMethodChannel?
     

@@ -1,5 +1,5 @@
 //
-//  sFLTWebViewController.swift
+//  BTWebViewController.swift
 //  bootpay_webview_flutter
 //
 //  Created by Taesup Yoon on 2021/07/05.
@@ -8,7 +8,7 @@
 import FlutterMacOS
 import WebKit
 
-public class FLTWebViewController: NSViewController, WKUIDelegate {
+public class BTWebViewController: NSViewController, WKUIDelegate {
     var _resumeWebView: WKWebView?
     var _webView: WKWebView?
     var _viewId: Int64 = 0
@@ -16,8 +16,8 @@ public class FLTWebViewController: NSViewController, WKUIDelegate {
     var _currentUrl: String = ""
 //    var _javaScriptChannelNames: NSMutableSet?
     var _javaScriptChannelNames: [String] = []
-    var _navigationDelegate: FLTWKNavigationDelegate?
-    var _progressionDelegate: FLTWKProgressionDelegate?
+    var _navigationDelegate: BTWKNavigationDelegate?
+    var _progressionDelegate: BTWKProgressionDelegate?
     
     
     enum PresentationStyle: Int {
@@ -73,7 +73,7 @@ public class FLTWebViewController: NSViewController, WKUIDelegate {
                 }
                  
                 _webView = WKWebView.init(frame: frame, configuration: configuration)
-                _navigationDelegate = FLTWKNavigationDelegate.init(channel: _channel!)
+                _navigationDelegate = BTWKNavigationDelegate.init(channel: _channel!)
                 
                 _webView?.uiDelegate = self
                 _webView?.navigationDelegate = _navigationDelegate
@@ -162,7 +162,7 @@ public class FLTWebViewController: NSViewController, WKUIDelegate {
     }
 }
 
-extension FLTWebViewController {
+extension BTWebViewController {
     func onUpdateSettings(_ call: FlutterMethodCall?, result: @escaping FlutterResult) {
         guard let error = applySettings(call!.arguments as? [String : Any]) else {
             result(nil)
@@ -299,7 +299,7 @@ extension FLTWebViewController {
                     let hasProgressTracking = (value as! NSNumber).boolValue
                     if hasProgressTracking {
                         if let webView = _webView, let channel = _channel {
-                            _progressionDelegate = FLTWKProgressionDelegate.init(webView: webView, channel: channel)
+                            _progressionDelegate = BTWKProgressionDelegate.init(webView: webView, channel: channel)
                         }
                     }
                 } else if key == "debuggingEnabled" {
@@ -402,7 +402,7 @@ extension FLTWebViewController {
         
         
         for channelName in channelNames {
-            let channel = FLTJavaScriptChannel(methodChannel: channel, javaScriptChannelName: channelName)
+            let channel = BTJavaScriptChannel(methodChannel: channel, javaScriptChannelName: channelName)
             
             userContentController.add(channel, name: channelName)
             
@@ -426,7 +426,7 @@ extension FLTWebViewController {
 }
 
 
-extension FLTWebViewController {
+extension BTWebViewController {
     
     public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         let popupView = WKWebView(frame: webView.bounds, configuration: configuration)

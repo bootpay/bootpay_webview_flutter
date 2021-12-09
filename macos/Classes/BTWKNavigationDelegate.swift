@@ -1,5 +1,5 @@
 //
-//  sFLTWKNavigationDelegate.swift
+//  BTWKNavigationDelegate.swift
 //  bootpay_webview_flutter
 //
 //  Created by Taesup Yoon on 2021/07/06.
@@ -9,7 +9,7 @@ import FlutterMacOS
 import WebKit
 
 
-public class FLTWKNavigationDelegate: NSObject, WKNavigationDelegate {
+public class BTWKNavigationDelegate: NSObject, WKNavigationDelegate {
     private weak var _methodChannel: FlutterMethodChannel?
     public var hasDartNavigationDelegate = false
     
@@ -123,13 +123,13 @@ public class FLTWKNavigationDelegate: NSObject, WKNavigationDelegate {
                     "errorCode": (error as NSError).code,
                     "domain": (error as NSError).domain,
                     "description": description,
-                    "errorType" : FLTWKNavigationDelegate.errorCodeToString((error as NSError).code)
+                    "errorType" : BTWKNavigationDelegate.errorCodeToString((error as NSError).code)
                 ])
         }
     }
 }
 
-extension FLTWKNavigationDelegate{
+extension BTWKNavigationDelegate{
     func getQueryStringParameter(url: String, param: String) -> String? {
       guard let url = URLComponents(string: url) else { return nil }
       return url.queryItems?.first(where: { $0.name == param })?.value

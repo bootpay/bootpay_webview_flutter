@@ -3,11 +3,11 @@
 // found in the LICENSE file.
 
 #import "FlutterWebView.h"
-#import "FLTWKNavigationDelegate.h"
-#import "FLTWKProgressionDelegate.h"
-#import "JavaScriptChannelHandler.h"
+#import "BTWKNavigationDelegate.h"
+#import "BTWKProgressionDelegate.h"
+#import "BTJavaScriptChannel.h"
 
-@implementation FLTWebViewFactory {
+@implementation BTWebViewFactory {
   NSObject<FlutterBinaryMessenger>* _messenger;
 }
 
@@ -26,7 +26,7 @@
 - (NSObject<FlutterPlatformView>*)createWithFrame:(CGRect)frame
                                    viewIdentifier:(int64_t)viewId
                                         arguments:(id _Nullable)args {
-  FLTWebViewController* webviewController = [[FLTWebViewController alloc] initWithFrame:frame
+  BTWebViewController* webviewController = [[BTWebViewController alloc] initWithFrame:frame
                                                                          viewIdentifier:viewId
                                                                               arguments:args
                                                                         binaryMessenger:_messenger];
@@ -57,7 +57,7 @@
 
 @end
 
-@implementation FLTWebViewController {
+@implementation BTWebViewController {
   WKWebView *_resumeWebView;
   FLTWKWebView* _webView;
   int64_t _viewId;
@@ -65,8 +65,8 @@
   NSString* _currentUrl;
   // The set of registered JavaScript channel names.
   NSMutableSet* _javaScriptChannelNames;
-  FLTWKNavigationDelegate* _navigationDelegate;
-  FLTWKProgressionDelegate* _progressionDelegate;
+  BTWKNavigationDelegate* _navigationDelegate;
+  BTWKProgressionDelegate* _progressionDelegate;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -96,7 +96,7 @@
                         inConfiguration:configuration];
 
     _webView = [[FLTWKWebView alloc] initWithFrame:frame configuration:configuration];
-    _navigationDelegate = [[FLTWKNavigationDelegate alloc] initWithChannel:_channel];
+    _navigationDelegate = [[BTWKNavigationDelegate alloc] initWithChannel:_channel];
     _webView.UIDelegate = self;
     _webView.navigationDelegate = _navigationDelegate;
     __weak __typeof__(self) weakSelf = self;
@@ -354,7 +354,7 @@
       NSNumber* hasProgressTrackingValue = settings[key];
       bool hasProgressTracking = [hasProgressTrackingValue boolValue];
       if (hasProgressTracking) {
-        _progressionDelegate = [[FLTWKProgressionDelegate alloc] initWithWebView:_webView
+        _progressionDelegate = [[BTWKProgressionDelegate alloc] initWithWebView:_webView
                                                                          channel:_channel];
       }
     } else if ([key isEqualToString:@"debuggingEnabled"]) {
@@ -461,8 +461,8 @@
 - (void)registerJavaScriptChannels:(NSSet*)channelNames
                         controller:(WKUserContentController*)userContentController {
   for (NSString* channelName in channelNames) {
-    FLTJavaScriptChannel* channel =
-        [[FLTJavaScriptChannel alloc] initWithMethodChannel:_channel
+    BTJavaScriptChannel* channel =
+        [[BTJavaScriptChannel alloc] initWithMethodChannel:_channel
                                       javaScriptChannelName:channelName];
     [userContentController addScriptMessageHandler:channel name:channelName];
     NSString* wrapperSource = [NSString

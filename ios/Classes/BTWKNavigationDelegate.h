@@ -7,7 +7,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FLTCookieManager : NSObject <FlutterPlugin>
+@interface BTWKNavigationDelegate : NSObject <WKNavigationDelegate>
+
+- (instancetype)initWithChannel:(FlutterMethodChannel*)channel;
+
+/**
+ * Whether to delegate navigation decisions over the method channel.
+ */
+@property(nonatomic, assign) BOOL hasDartNavigationDelegate;
 
 @end
 

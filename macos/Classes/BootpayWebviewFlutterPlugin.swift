@@ -11,7 +11,7 @@ public class BootpayWebviewFlutterPlugin: NSObject, FlutterPlugin {
             return w.contentViewController?.view == registrar.view
         }?.contentViewController
     }()
-    private var webViewController: FLTWebViewController?
+    private var webViewController: BTWebViewController?
     
     
     required init(channel: FlutterMethodChannel, registrar: FlutterPluginRegistrar) {
@@ -28,7 +28,7 @@ public class BootpayWebviewFlutterPlugin: NSObject, FlutterPlugin {
 //        var width = parentFrame.size.width
 //        var height = parentFrame.size.height
         
-        webViewController = FLTWebViewController(
+        webViewController = BTWebViewController(
             CGRect(
                 x: parentFrame.origin.x,
                 y: parentFrame.origin.y,
@@ -51,7 +51,7 @@ public class BootpayWebviewFlutterPlugin: NSObject, FlutterPlugin {
     )
     let instance = BootpayWebviewFlutterPlugin(channel: channel, registrar: registrar)
     registrar.addMethodCallDelegate(instance, channel: channel)
-    FLTCookieManager.register(with: registrar)
+    BTCookieManager.register(with: registrar)
   }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -87,7 +87,7 @@ public class BootpayWebviewFlutterPlugin: NSObject, FlutterPlugin {
             return
         }
         
-        let presentationStyle = FLTWebViewController.PresentationStyle(
+        let presentationStyle = BTWebViewController.PresentationStyle(
             rawValue: args["presentationStyle"] as! Int
         )!
                 
@@ -116,7 +116,7 @@ public class BootpayWebviewFlutterPlugin: NSObject, FlutterPlugin {
 //                }
 //            }
             
-            webViewController = FLTWebViewController(
+            webViewController = BTWebViewController(
                 channel: channel,
                 frame: CGRect(
                     x: parentFrame.origin.x,
@@ -178,7 +178,7 @@ public class BootpayWebviewFlutterPlugin: NSObject, FlutterPlugin {
         webViewController = nil
         NotificationCenter.default.removeObserver(
             self,
-            name: FLTWebViewController.closeNotification,
+            name: BTWebViewController.closeNotification,
             object: nil
         )
                
