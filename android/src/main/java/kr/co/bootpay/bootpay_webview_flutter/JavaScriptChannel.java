@@ -6,6 +6,7 @@ package kr.co.bootpay.bootpay_webview_flutter;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 import io.flutter.plugin.common.MethodChannel;
 import java.util.HashMap;

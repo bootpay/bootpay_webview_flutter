@@ -1,3 +1,6 @@
+## 2.2.0
+* Android 환경에서 네이버페이 결제진행 버그 수정, android gradle 7.0.2로 빌드 
+
 ## 2.1.41
 * ios prefix 수정 = FLT** -> BT**
 

@@ -62,21 +62,19 @@ public class FlutterView implements PlatformView, MethodCallHandler {
     @Override
     public boolean onCreateWindow(
         final WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+      mainView = view;
+
       final WebViewClient webViewClient =
           new WebViewClient() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean shouldOverrideUrlLoading(
                 @NonNull WebView view, @NonNull WebResourceRequest request) {
-              mainView = view;
-//              return BootpayUrlHelper.shouldOverrideUrlLoading(view, request.getUrl().toString());
               return BootpayUrlHelper.shouldOverrideUrlLoadingMethodChannel(view, request.getUrl().toString(), request.getRequestHeaders(), request.isForMainFrame(), methodChannel);
             }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-              mainView = view;
-//              return BootpayUrlHelper.shouldOverrideUrlLoading(view, url);
               return BootpayUrlHelper.shouldOverrideUrlLoadingMethodChannel(view, url, null, true, methodChannel);
             }
 

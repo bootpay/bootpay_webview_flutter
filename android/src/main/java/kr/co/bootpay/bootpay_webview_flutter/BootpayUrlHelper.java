@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.webkit.WebView;
 
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import io.flutter.plugin.common.MethodChannel;
 
@@ -31,7 +34,22 @@ public class BootpayUrlHelper {
             else return startGooglePlay(intent, context);
         }
 
-        notifyOnNavigationRequest(url, headers, view, isMainFrame, methodChannel);
+        //네이버페이 팝업 안닫히는 버그 - window.parent 이벤트를 먹여야 하는데 url navigation 이 되서 해당 이벤트가 무시되는 현상이 있음
+        List<String> ignoreUrls = Arrays.asList(
+                "pay.naver.com",
+                "nicepay.co.kr",
+                "payapp.kr",
+                "bootpay.co.kr",
+                "kcp.co.kr"
+        );
+        boolean isPreventUrl = false;
+        for(String ignoreUrl : ignoreUrls) {
+            if(url.contains(ignoreUrl)) {
+                isPreventUrl = true;
+                break;
+            }
+        }
+        if(isPreventUrl == false) notifyOnNavigationRequest(url, headers, view, isMainFrame, methodChannel);
         return url.contains("vguardend");
     }
 
