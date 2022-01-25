@@ -37,6 +37,10 @@
                      arguments:arguments
                         result:^(id _Nullable result) {
       
+      if(![navigationAction.request.URL.absoluteString hasPrefix:@"https://nid.naver.com/nidlogin.login"]) {
+          [webView evaluateJavaScript:@"document.getElementById('back').style.display='none';" completionHandler:nil];
+      }
+      
       if([self isItunesURL:navigationAction.request.URL.absoluteString]) {
           [self startAppToApp:navigationAction.request.URL];
           decisionHandler(WKNavigationActionPolicyCancel);

@@ -439,6 +439,7 @@ public class FlutterView implements PlatformView, MethodCallHandler {
     if (jsString == null) {
       throw new UnsupportedOperationException("JavaScript string cannot be null");
     }
+//    mainView
     webView.evaluateJavascript(
         jsString,
         new android.webkit.ValueCallback<String>() {

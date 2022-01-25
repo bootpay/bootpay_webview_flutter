@@ -1,3 +1,6 @@
+## 2.2.2
+* 네이버페이 결제시 뒤로가기 버튼 제거 
+
 ## 2.2.1 
 * Android gradle com.android.tools.build:gradle:7.0.2 로 업데이트 
 

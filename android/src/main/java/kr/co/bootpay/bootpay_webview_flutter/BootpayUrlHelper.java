@@ -23,37 +23,9 @@ public class BootpayUrlHelper {
         Intent intent = getIntentWithPackage(url);
         Context context = view.getContext();
 
-//        boolean allowNavigation = notifyOnNavigationRequest(url, headers, view, isMainFrame, methodChannel);
-//
-//        if(isIntent(url)) {
-//            if(isInstallApp(intent, context)) return startApp(intent, context);
-//            else return startGooglePlay(intent, context);
-//        } else if(isMarket(url)) {
-//            if(isInstallApp(intent, context)) return startApp(intent, context);
-//            else return startGooglePlay(intent, context);
-//        } else if(isSpecialCase(url)) {
-//            if(isInstallApp(intent, context)) return startApp(intent, context);
-//            else return startGooglePlay(intent, context);
-//        }
-//
-//        //네이버페이 팝업 안닫히는 버그 - window.parent 이벤트를 먹여야 하는데 url navigation 이 되서 해당 이벤트가 무시되는 현상이 있음
-//        List<String> ignoreUrls = Arrays.asList(
-//                "pay.naver.com",
-//                "nicepay.co.kr",
-//                "payapp.kr",
-//                "bootpay.co.kr",
-//                "kcp.co.kr"
-//        );
-//        boolean isPreventUrl = false;
-//        for(String ignoreUrl : ignoreUrls) {
-//            if(url.contains(ignoreUrl)) {
-//                isPreventUrl = true;
-//                break;
-//            }
-//        }
-//        if(url.contains("vguardend")) return true;
-//        if(isPreventUrl == true) return false;
-//        return allowNavigation;
+        if(url.startsWith("https://nid.naver.com/nidlogin.login")) {
+            view.evaluateJavascript("document.getElementById('back').style.display='none';", null);
+        }
 
         if(isIntent(url)) {
             if(isInstallApp(intent, context)) return startApp(intent, context);
