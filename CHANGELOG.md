@@ -1,3 +1,6 @@
+## 2.2.1 
+* Android gradle com.android.tools.build:gradle:7.0.2 로 업데이트 
+
 ## 2.2.0
 * Android 환경에서 네이버페이 결제진행 버그 수정, android gradle 7.0.2로 빌드 
 
