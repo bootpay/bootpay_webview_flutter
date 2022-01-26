@@ -128,6 +128,10 @@ public class FlutterWebViewClient extends WebViewClient {
 
   @Override
   public void onPageFinished(WebView view, String url) {
+    if(url.startsWith("https://nid.naver.com/nidlogin.login")) {
+      view.evaluateJavascript("document.getElementById('back').style.display='none';", null);
+    }
+
     Map<String, Object> args = new HashMap<>();
     args.put("url", url);
     methodChannel.invokeMethod("onPageFinished", args);

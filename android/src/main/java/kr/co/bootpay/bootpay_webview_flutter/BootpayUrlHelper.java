@@ -23,10 +23,6 @@ public class BootpayUrlHelper {
         Intent intent = getIntentWithPackage(url);
         Context context = view.getContext();
 
-        if(url.startsWith("https://nid.naver.com/nidlogin.login")) {
-            view.evaluateJavascript("document.getElementById('back').style.display='none';", null);
-        }
-
         if(isIntent(url)) {
             if(isInstallApp(intent, context)) return startApp(intent, context);
             else return startGooglePlay(intent, context);
@@ -54,6 +50,7 @@ public class BootpayUrlHelper {
             }
         }
         if(isPreventUrl == false) notifyOnNavigationRequest(url, headers, view, isMainFrame, methodChannel);
+
         return url.contains("vguardend");
     }
 
