@@ -41,8 +41,10 @@ class _WebViewExampleState extends State<WebViewExample> {
             print("WebView is loading (progress : $progress%)");
           },
           navigationDelegate: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              print('blocking navigation to $request}');
+            if (request.url.startsWith('https://your.service.domain/')) {
+              print('allowing navigation to $request');
+              return NavigationDecision.navigate;
+            } else if(Platform.isAndroid) { //bootpay의 정상 수행을 위해 필요합니다
               return NavigationDecision.prevent;
             }
             print('allowing navigation to $request');
