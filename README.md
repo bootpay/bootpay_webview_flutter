@@ -68,7 +68,8 @@ class WebViewExample extends StatefulWidget {
 }
 
 class _WebViewExampleState extends State<WebViewExample> {
-  final Completer<WebViewController> _controller = Completer<WebViewController>();
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
 
   @override
   void initState() {
@@ -87,7 +88,7 @@ class _WebViewExampleState extends State<WebViewExample> {
       // to allow calling Scaffold.of(context) so we can show a snackbar.
       body: Builder(builder: (BuildContext context) {
         return WebView(
-          initialUrl: 'https://www.your-pgdomain.com',
+          initialUrl: 'https://your.payweb.domain',
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) {
             _controller.complete(webViewController);
@@ -96,8 +97,10 @@ class _WebViewExampleState extends State<WebViewExample> {
             print("WebView is loading (progress : $progress%)");
           },
           navigationDelegate: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              print('blocking navigation to $request}');
+            if (request.url.startsWith('https://your.service.domain/')) {
+              print('allowing navigation to $request');
+              return NavigationDecision.navigate;
+            } else if(Platform.isAndroid) { //bootpay의 정상 수행을 위해 필요합니다
               return NavigationDecision.prevent;
             }
             print('allowing navigation to $request');
@@ -109,7 +112,6 @@ class _WebViewExampleState extends State<WebViewExample> {
           onPageFinished: (String url) {
             print('Page finished loading: $url');
           },
-          gestureNavigationEnabled: true,
         );
       }),
     );
