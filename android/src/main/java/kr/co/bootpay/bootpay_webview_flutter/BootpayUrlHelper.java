@@ -34,8 +34,6 @@ public class BootpayUrlHelper {
             else return startGooglePlay(intent, context);
         }
 
-        Log.d("bootpay", url);
-
         //네이버페이 팝업 안닫히는 버그 - window.parent 이벤트를 먹여야 하는데 url navigation 이 되서 해당 이벤트가 무시되는 현상이 있음
         List<String> ignoreUrls = Arrays.asList(
                 "pay.naver.com",
@@ -53,7 +51,8 @@ public class BootpayUrlHelper {
         }
         if(isPreventUrl == false) notifyOnNavigationRequest(url, headers, view, isMainFrame, methodChannel);
 
-        return url.contains("vguardend");
+        return true;
+//        return url.contains("vguardend");
     }
 
     public static void notifyOnNavigationRequest(String url, Map<String, String> headers, WebView webview, boolean isMainFrame,  MethodChannel methodChannel) {
@@ -85,6 +84,7 @@ public class BootpayUrlHelper {
             else return startGooglePlay(intent, context);
         }
 
+//        return true;
         return url.contains("vguardend");
     }
 

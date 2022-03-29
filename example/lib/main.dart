@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -45,7 +46,7 @@ class _WebViewExampleState extends State<WebViewExample> {
               print('allowing navigation to $request');
               return NavigationDecision.navigate;
             } else if(Platform.isAndroid) { //bootpay의 정상 수행을 위해 필요합니다
-              return NavigationDecision.prevent;
+              return NavigationDecision.prevent; // 결제도메인에서는 페이지 이동이벤트를 보내지 않습니다
             }
             print('allowing navigation to $request');
             return NavigationDecision.navigate;

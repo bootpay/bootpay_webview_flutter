@@ -132,6 +132,7 @@ public class FlutterWebViewClient extends WebViewClient {
       view.evaluateJavascript("document.getElementById('back').style.display='none';", null);
     }
 
+
     Map<String, Object> args = new HashMap<>();
     args.put("url", url);
     methodChannel.invokeMethod("onPageFinished", args);
