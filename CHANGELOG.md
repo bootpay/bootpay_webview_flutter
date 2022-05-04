@@ -1,5 +1,5 @@
 ## 3.2.0
-* 2.2.21로 롤백
+* downgrade android target sdk version 32 -> 31
 
 ## 2.3.0
 * android popup 일 경우 methodChannel 이벤트가 부모네 걸려있어 정상동작 하지 않는 버그 수정 
