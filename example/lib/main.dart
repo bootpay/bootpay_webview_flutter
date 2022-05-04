@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -14,7 +13,7 @@ class WebViewExample extends StatefulWidget {
 
 class _WebViewExampleState extends State<WebViewExample> {
   final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  Completer<WebViewController>();
 
   @override
   void initState() {
@@ -33,7 +32,9 @@ class _WebViewExampleState extends State<WebViewExample> {
       // to allow calling Scaffold.of(context) so we can show a snackbar.
       body: Builder(builder: (BuildContext context) {
         return WebView(
-          initialUrl: 'https://your.payweb.domain',
+          // initialUrl: 'https://your.payweb.domain',
+          // initialUrl: 'https://dev-js.bootapi.com/test/payment/ ',
+          initialUrl: 'https://d-cdn.bootapi.com/test/payment/',
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) {
             _controller.complete(webViewController);
@@ -42,11 +43,9 @@ class _WebViewExampleState extends State<WebViewExample> {
             print("WebView is loading (progress : $progress%)");
           },
           navigationDelegate: (NavigationRequest request) {
-            if (request.url.startsWith('https://your.service.domain/')) {
-              print('allowing navigation to $request');
-              return NavigationDecision.navigate;
-            } else if(Platform.isAndroid) { //bootpay의 정상 수행을 위해 필요합니다
-              return NavigationDecision.prevent; // 결제도메인에서는 페이지 이동이벤트를 보내지 않습니다
+            if (request.url.startsWith('https://www.youtube.com/')) {
+              print('blocking navigation to $request}');
+              return NavigationDecision.prevent;
             }
             print('allowing navigation to $request');
             return NavigationDecision.navigate;

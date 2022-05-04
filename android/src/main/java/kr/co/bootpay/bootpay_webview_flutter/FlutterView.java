@@ -25,7 +25,6 @@ import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -36,7 +35,6 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.platform.PlatformView;
-import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,8 +44,7 @@ import java.util.Map;
 
 public class FlutterView implements PlatformView, MethodCallHandler {
   private static final String JS_CHANNEL_NAMES_FIELD = "javascriptChannelNames";
-  private WebView webView;
-  private WebView popupView;
+  private final WebView webView;
   private final MethodChannel methodChannel;
   private final FlutterWebViewClient flutterWebViewClient;
   private final Handler platformThreadHandler;
@@ -59,69 +56,56 @@ public class FlutterView implements PlatformView, MethodCallHandler {
     public void onCloseWindow(WebView window) {
       super.onCloseWindow(window);
       if(mainView != null) mainView.removeView(window);
-      popupView = null;
       window.setVisibility(View.GONE);
     }
 
-
     @Override
     public boolean onCreateWindow(
-        final WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+            final WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
       mainView = view;
 
       final WebViewClient webViewClient =
-          new WebViewClient() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public boolean shouldOverrideUrlLoading(
-                    @NonNull WebView view, @NonNull WebResourceRequest request) {
-//              if (!webViewClient.shouldOverrideUrlLoading(view, request)) {
-//                view.loadUrl(request.getUrl().toString());
-//              }
-              return BootpayUrlHelper.shouldOverrideUrlLoadingMethodChannel(view, request.getUrl().toString(), request.getRequestHeaders(), request.isForMainFrame(), methodChannel);
-//              return true;
-            }
+              new WebViewClient() {
+                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+                @Override
+                public boolean shouldOverrideUrlLoading(
+                        @NonNull WebView view, @NonNull WebResourceRequest request) {
+                  return BootpayUrlHelper.shouldOverrideUrlLoadingMethodChannel(view, request.getUrl().toString(), request.getRequestHeaders(), request.isForMainFrame(), methodChannel);
+                }
 
-//            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-//            @Override
-//            public boolean shouldOverrideUrlLoading(
-//                @NonNull WebView view, @NonNull WebResourceRequest request) {
-//              return BootpayUrlHelper.shouldOverrideUrlLoadingMethodChannel(view, request.getUrl().toString(), request.getRequestHeaders(), request.isForMainFrame(), methodChannel);
-//            }
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                  return BootpayUrlHelper.shouldOverrideUrlLoadingMethodChannel(view, url, null, true, methodChannel);
+                }
 
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-              return BootpayUrlHelper.shouldOverrideUrlLoadingMethodChannel(view, url, null, true, methodChannel);
-            }
+                public void onPageStarted(WebView view, String url) {
+                  Map<String, Object> args = new HashMap<>();
+                  args.put("url", url);
+                  methodChannel.invokeMethod("onPageStarted", args);
+                }
 
-            public void onPageStarted(WebView view, String url) {
-              Map<String, Object> args = new HashMap<>();
-              args.put("url", url);
-              methodChannel.invokeMethod("onPageStarted", args);
-            }
+                @Override
+                public void onPageFinished(WebView view, String url) {
 
-            @Override
-            public void onPageFinished(WebView view, String url) {
+                  if(url.startsWith("https://nid.naver.com/nidlogin.login")) {
+                    view.evaluateJavascript("document.getElementById('back').style.display='none';", null);
+                  }
 
-              if(url.startsWith("https://nid.naver.com/nidlogin.login")) {
-                view.evaluateJavascript("document.getElementById('back').style.display='none';", null);
-              }
+                  Map<String, Object> args = new HashMap<>();
+                  args.put("url", url);
+                  methodChannel.invokeMethod("onPageFinished", args);
+                }
 
-              Map<String, Object> args = new HashMap<>();
-              args.put("url", url);
-              methodChannel.invokeMethod("onPageFinished", args);
-            }
-
-            private void onWebResourceError(
-                    final int errorCode, final String description, final String failingUrl) {
-              final Map<String, Object> args = new HashMap<>();
-              args.put("errorCode", errorCode);
-              args.put("description", description);
-              args.put("errorType", FlutterWebViewClient.errorCodeToString(errorCode));
-              args.put("failingUrl", failingUrl);
-              methodChannel.invokeMethod("onWebResourceError", args);
-            }
-          };
+                private void onWebResourceError(
+                        final int errorCode, final String description, final String failingUrl) {
+                  final Map<String, Object> args = new HashMap<>();
+                  args.put("errorCode", errorCode);
+                  args.put("description", description);
+                  args.put("errorType", FlutterWebViewClient.errorCodeToString(errorCode));
+                  args.put("failingUrl", failingUrl);
+                  methodChannel.invokeMethod("onWebResourceError", args);
+                }
+              };
 
       final WebView newWebView = new WebView(view.getContext());
       newWebView.setWebViewClient(webViewClient);
@@ -208,9 +192,6 @@ public class FlutterView implements PlatformView, MethodCallHandler {
       transport.setWebView(newWebView);
       resultMsg.sendToTarget();
 
-      popupView = newWebView;
-
-
       return true;
     }
 
@@ -224,22 +205,22 @@ public class FlutterView implements PlatformView, MethodCallHandler {
   @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
   @SuppressWarnings("unchecked")
   FlutterView(
-      final Context context,
-      BinaryMessenger messenger,
-      int id,
-      Map<String, Object> params,
-      View containerView) {
+          final Context context,
+          BinaryMessenger messenger,
+          int id,
+          Map<String, Object> params,
+          View containerView) {
 
     DisplayListenerProxy displayListenerProxy = new DisplayListenerProxy();
     DisplayManager displayManager =
-        (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
+            (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
     displayListenerProxy.onPreWebViewInitialization(displayManager);
 
     Boolean usesHybridComposition = (Boolean) params.get("usesHybridComposition");
     webView =
-        (usesHybridComposition)
-            ? new WebView(context)
-            : new InputAwareWebView(context, containerView);
+            (usesHybridComposition)
+                    ? new WebView(context)
+                    : new InputAwareWebView(context, containerView);
 
     displayListenerProxy.onPostWebViewInitialization(displayManager);
 
@@ -300,7 +281,6 @@ public class FlutterView implements PlatformView, MethodCallHandler {
   public View getView() {
     return webView;
   }
-
 
   // @Override
   // This is overriding a method that hasn't rolled into stable Flutter yet. Including the
@@ -409,11 +389,6 @@ public class FlutterView implements PlatformView, MethodCallHandler {
     }
   }
 
-  private WebView getWebView() {
-    if(popupView != null) return popupView;
-    return webView;
-  }
-
   @SuppressWarnings("unchecked")
   private void loadUrl(MethodCall methodCall, Result result) {
     Map<String, Object> request = (Map<String, Object>) methodCall.arguments;
@@ -422,50 +397,39 @@ public class FlutterView implements PlatformView, MethodCallHandler {
     if (headers == null) {
       headers = Collections.emptyMap();
     }
-//    webView.loadUrl(url, headers);
-    getWebView().loadUrl(url, headers);
+    webView.loadUrl(url, headers);
     result.success(null);
   }
 
   private void canGoBack(Result result) {
-//    result.success(webView.canGoBack());
-    result.success(getWebView().canGoBack());
+    result.success(webView.canGoBack());
   }
 
   private void canGoForward(Result result) {
-//    result.success(webView.canGoForward());
-    result.success(getWebView().canGoForward());
+    result.success(webView.canGoForward());
   }
 
   private void goBack(Result result) {
-//    if (webView.canGoBack()) {
-//      webView.goBack();
-//    }
-    if (getWebView().canGoBack()) {
-      getWebView().goBack();
+    if (webView.canGoBack()) {
+      webView.goBack();
     }
     result.success(null);
   }
 
   private void goForward(Result result) {
-//    if (webView.canGoForward()) {
-//      webView.goForward();
-//    }
-    if (getWebView().canGoForward()) {
-      getWebView().goForward();
+    if (webView.canGoForward()) {
+      webView.goForward();
     }
     result.success(null);
   }
 
   private void reload(Result result) {
-//    webView.reload();
-    getWebView().reload();
+    webView.reload();
     result.success(null);
   }
 
   private void currentUrl(Result result) {
-//    result.success(webView.getUrl());
-    result.success(getWebView().getUrl());
+    result.success(webView.getUrl());
   }
 
   @SuppressWarnings("unchecked")
@@ -480,15 +444,8 @@ public class FlutterView implements PlatformView, MethodCallHandler {
     if (jsString == null) {
       throw new UnsupportedOperationException("JavaScript string cannot be null");
     }
-//    webView.evaluateJavascript(
-//        jsString,
-//        new android.webkit.ValueCallback<String>() {
-//          @Override
-//          public void onReceiveValue(String value) {
-//            result.success(value);
-//          }
-//        });
-    getWebView().evaluateJavascript(
+//    mainView
+    webView.evaluateJavascript(
             jsString,
             new android.webkit.ValueCallback<String>() {
               @Override
@@ -509,22 +466,19 @@ public class FlutterView implements PlatformView, MethodCallHandler {
   private void removeJavaScriptChannels(MethodCall methodCall, Result result) {
     List<String> channelNames = (List<String>) methodCall.arguments;
     for (String channelName : channelNames) {
-//      webView.removeJavascriptInterface(channelName);
-      getWebView().removeJavascriptInterface(channelName);
+      webView.removeJavascriptInterface(channelName);
     }
     result.success(null);
   }
 
   private void clearCache(Result result) {
-//    webView.clearCache(true);
-    getWebView().clearCache(true);
+    webView.clearCache(true);
     WebStorage.getInstance().deleteAllData();
     result.success(null);
   }
 
   private void getTitle(Result result) {
-//    result.success(webView.getTitle());
-    result.success(getWebView().getTitle());
+    result.success(webView.getTitle());
   }
 
   private void scrollTo(MethodCall methodCall, Result result) {
@@ -532,8 +486,7 @@ public class FlutterView implements PlatformView, MethodCallHandler {
     int x = (int) request.get("x");
     int y = (int) request.get("y");
 
-//    webView.scrollTo(x, y);
-    getWebView().scrollTo(x, y);
+    webView.scrollTo(x, y);
 
     result.success(null);
   }
@@ -543,19 +496,16 @@ public class FlutterView implements PlatformView, MethodCallHandler {
     int x = (int) request.get("x");
     int y = (int) request.get("y");
 
-//    webView.scrollBy(x, y);
-    getWebView().scrollBy(x, y);
+    webView.scrollBy(x, y);
     result.success(null);
   }
 
   private void getScrollX(Result result) {
-//    result.success(webView.getScrollX());
-    result.success(getWebView().getScrollX());
+    result.success(webView.getScrollX());
   }
 
   private void getScrollY(Result result) {
-//    result.success(webView.getScrollY());
-    result.success(getWebView().getScrollY());
+    result.success(webView.getScrollY());
   }
 
   private void applySettings(Map<String, Object> settings) {
@@ -569,17 +519,15 @@ public class FlutterView implements PlatformView, MethodCallHandler {
           final boolean hasNavigationDelegate = (boolean) settings.get(key);
 
           final WebViewClient webViewClient =
-              flutterWebViewClient.createWebViewClient(hasNavigationDelegate);
+                  flutterWebViewClient.createWebViewClient(hasNavigationDelegate);
 
-//          webView.setWebViewClient(webViewClient);
-          getWebView().setWebViewClient(webViewClient);
+          webView.setWebViewClient(webViewClient);
           break;
         case "debuggingEnabled":
           final boolean debuggingEnabled = (boolean) settings.get(key);
 
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            webView.setWebContentsDebuggingEnabled(debuggingEnabled);
-            getWebView().setWebContentsDebuggingEnabled(debuggingEnabled);
+            webView.setWebContentsDebuggingEnabled(debuggingEnabled);
           }
           break;
         case "hasProgressTracking":
@@ -602,12 +550,10 @@ public class FlutterView implements PlatformView, MethodCallHandler {
   private void updateJsMode(int mode) {
     switch (mode) {
       case 0: // disabled
-//        webView.getSettings().setJavaScriptEnabled(false);
-        getWebView().getSettings().setJavaScriptEnabled(false);
+        webView.getSettings().setJavaScriptEnabled(false);
         break;
       case 1: // unrestricted
-//        webView.getSettings().setJavaScriptEnabled(true);
-        getWebView().getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setJavaScriptEnabled(true);
         break;
       default:
         throw new IllegalArgumentException("Trying to set unknown JavaScript mode: " + mode);
@@ -619,35 +565,27 @@ public class FlutterView implements PlatformView, MethodCallHandler {
     // other values we require a user gesture.
     boolean requireUserGesture = mode != 1;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-//      webView.getSettings().setMediaPlaybackRequiresUserGesture(requireUserGesture);
-      getWebView().getSettings().setMediaPlaybackRequiresUserGesture(requireUserGesture);
+      webView.getSettings().setMediaPlaybackRequiresUserGesture(requireUserGesture);
     }
   }
 
   private void registerJavaScriptChannelNames(List<String> channelNames) {
     for (String channelName : channelNames) {
-//      webView.addJavascriptInterface(
-//          new JavaScriptChannel(methodChannel, channelName, platformThreadHandler), channelName);
-      getWebView().addJavascriptInterface(
+      webView.addJavascriptInterface(
               new JavaScriptChannel(methodChannel, channelName, platformThreadHandler), channelName);
     }
   }
 
   private void updateUserAgent(String userAgent) {
-//    webView.getSettings().setUserAgentString(userAgent);
-    getWebView().getSettings().setUserAgentString(userAgent);
+    webView.getSettings().setUserAgentString(userAgent);
   }
 
   @Override
   public void dispose() {
     methodChannel.setMethodCallHandler(null);
-//    if (webView instanceof InputAwareWebView) {
-//      ((InputAwareWebView) webView).dispose();
-//    }
-//    webView.destroy();
-    if (getWebView() instanceof InputAwareWebView) {
-      ((InputAwareWebView) getWebView()).dispose();
+    if (webView instanceof InputAwareWebView) {
+      ((InputAwareWebView) webView).dispose();
     }
-    getWebView().destroy();
+    webView.destroy();
   }
 }

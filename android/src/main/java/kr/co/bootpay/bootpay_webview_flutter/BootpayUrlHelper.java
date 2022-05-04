@@ -51,8 +51,7 @@ public class BootpayUrlHelper {
         }
         if(isPreventUrl == false) notifyOnNavigationRequest(url, headers, view, isMainFrame, methodChannel);
 
-        return true;
-//        return url.contains("vguardend");
+        return url.contains("vguardend");
     }
 
     public static void notifyOnNavigationRequest(String url, Map<String, String> headers, WebView webview, boolean isMainFrame,  MethodChannel methodChannel) {
@@ -84,7 +83,6 @@ public class BootpayUrlHelper {
             else return startGooglePlay(intent, context);
         }
 
-//        return true;
         return url.contains("vguardend");
     }
 

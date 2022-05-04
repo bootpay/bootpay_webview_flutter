@@ -75,7 +75,7 @@ public class FlutterWebViewClient extends WebViewClient {
     }
 
     final String message =
-        String.format(Locale.getDefault(), "Could not find a string for errorCode: %d", errorCode);
+            String.format(Locale.getDefault(), "Could not find a string for errorCode: %d", errorCode);
     throw new IllegalArgumentException(message);
   }
 
@@ -113,8 +113,8 @@ public class FlutterWebViewClient extends WebViewClient {
     // We proceed assuming that the navigation is targeted to the main frame. If the page had any
     // frames they will be loaded in the main frame instead.
     Log.w(
-        TAG,
-        "Using a navigationDelegate with an old webview implementation, pages with frames or iframes will not work");
+            TAG,
+            "Using a navigationDelegate with an old webview implementation, pages with frames or iframes will not work");
 //    notifyOnNavigationRequest(url, null, view, true);
 //    return BootpayUrlHelper.shouldOverrideUrlLoading(view, url);
     return BootpayUrlHelper.shouldOverrideUrlLoadingMethodChannel(view, url, null, true, methodChannel);
@@ -132,7 +132,6 @@ public class FlutterWebViewClient extends WebViewClient {
       view.evaluateJavascript("document.getElementById('back').style.display='none';", null);
     }
 
-
     Map<String, Object> args = new HashMap<>();
     args.put("url", url);
     methodChannel.invokeMethod("onPageFinished", args);
@@ -147,7 +146,7 @@ public class FlutterWebViewClient extends WebViewClient {
   }
 
   private void onWebResourceError(
-      final int errorCode, final String description, final String failingUrl) {
+          final int errorCode, final String description, final String failingUrl) {
     final Map<String, Object> args = new HashMap<>();
     args.put("errorCode", errorCode);
     args.put("description", description);
@@ -157,13 +156,13 @@ public class FlutterWebViewClient extends WebViewClient {
   }
 
   private void notifyOnNavigationRequest(
-      String url, Map<String, String> headers, WebView webview, boolean isMainFrame) {
+          String url, Map<String, String> headers, WebView webview, boolean isMainFrame) {
     HashMap<String, Object> args = new HashMap<>();
     args.put("url", url);
     args.put("isForMainFrame", isMainFrame);
     if (isMainFrame) {
       methodChannel.invokeMethod(
-          "navigationRequest", args, new OnNavigationRequestResult(url, headers, webview));
+              "navigationRequest", args, new OnNavigationRequestResult(url, headers, webview));
     } else {
       methodChannel.invokeMethod("navigationRequest", args);
     }
@@ -203,14 +202,14 @@ public class FlutterWebViewClient extends WebViewClient {
       @TargetApi(Build.VERSION_CODES.M)
       @Override
       public void onReceivedError(
-          WebView view, WebResourceRequest request, WebResourceError error) {
+              WebView view, WebResourceRequest request, WebResourceError error) {
         FlutterWebViewClient.this.onWebResourceError(
-            error.getErrorCode(), error.getDescription().toString(), request.getUrl().toString());
+                error.getErrorCode(), error.getDescription().toString(), request.getUrl().toString());
       }
 
       @Override
       public void onReceivedError(
-          WebView view, int errorCode, String description, String failingUrl) {
+              WebView view, int errorCode, String description, String failingUrl) {
         FlutterWebViewClient.this.onWebResourceError(errorCode, description, failingUrl);
       }
 
@@ -251,14 +250,14 @@ public class FlutterWebViewClient extends WebViewClient {
       @SuppressLint("RequiresFeature")
       @Override
       public void onReceivedError(
-          WebView view, WebResourceRequest request, WebResourceErrorCompat error) {
+              WebView view, WebResourceRequest request, WebResourceErrorCompat error) {
         FlutterWebViewClient.this.onWebResourceError(
-            error.getErrorCode(), error.getDescription().toString(), request.getUrl().toString());
+                error.getErrorCode(), error.getDescription().toString(), request.getUrl().toString());
       }
 
       @Override
       public void onReceivedError(
-          WebView view, int errorCode, String description, String failingUrl) {
+              WebView view, int errorCode, String description, String failingUrl) {
         FlutterWebViewClient.this.onWebResourceError(errorCode, description, failingUrl);
       }
 
