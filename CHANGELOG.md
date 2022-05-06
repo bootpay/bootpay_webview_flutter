@@ -1,3 +1,6 @@
+## 3.2.1
+* ios 카드사 앱 미설치시 설치하도록 로직 수정 
+
 ## 3.2.0
 * downgrade android target sdk version 32 -> 31
 
