@@ -81,7 +81,6 @@
         <package android:name="com.sktelecom.tauth" /> <!--PASS-->
         <package android:name="com.lguplus.smartotp" /> <!--PASS-->
 
-
         <!--해외결제-->
         <package android:name="com.eg.android.AlipayGphone" />
     </queries>
