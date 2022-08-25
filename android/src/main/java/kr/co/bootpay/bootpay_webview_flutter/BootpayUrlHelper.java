@@ -148,7 +148,7 @@ public class BootpayUrlHelper {
     }
 
     public static boolean startApp(Intent intent, Context context) {
-        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         return true;
@@ -162,7 +162,7 @@ public class BootpayUrlHelper {
 
             try {
                 Intent addIntent = new Intent(Intent.ACTION_VIEW, intent.getData());
-                addIntent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                addIntent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
                 addIntent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(addIntent);
             } catch (Exception e) {
@@ -170,7 +170,7 @@ public class BootpayUrlHelper {
                 if(dataUri != null && dataUri.toString().startsWith("wooripay://")) packageName = "com.wooricard.wpay"; //우리카드 예외처리
 
                 Intent addIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
-                addIntent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                addIntent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
                 addIntent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(addIntent);
 //                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
@@ -179,12 +179,12 @@ public class BootpayUrlHelper {
         }
         try {
             Intent addIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
-            addIntent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            addIntent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
             addIntent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(addIntent);
         } catch (android.content.ActivityNotFoundException anfe) {
             Intent addIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName));
-            addIntent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            addIntent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK);
             addIntent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(addIntent);
         }

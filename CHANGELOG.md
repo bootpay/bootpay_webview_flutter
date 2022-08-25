@@ -1,3 +1,6 @@
+## 3.2.21
+* intent.FLAG_ACTIVITY_CLEAR_TASK 삭제 
+
 ## 3.2.2
 * 앱 스키마 몇개 추가 
 
